@@ -1,0 +1,23 @@
+<div>
+    <section class="header">
+        <span>Add event</span>
+        <span>{{data.date.toString()}}</span>
+    </section>
+    <section class="main">
+        <form class="example-form">
+            <mat-form-field class="">
+              <mat-label>Event name</mat-label>
+              <input matInput placeholder="Ex. Pizza" value="Sushi">
+            </mat-form-field>
+          
+            <mat-form-field>
+            <mat-label>Favorite food</mat-label>
+            <mat-select>
+                @for (food of [1,2,3]; track food) {
+                <mat-option [value]="food">{{food}}</mat-option>
+                }
+            </mat-select>
+            </mat-form-field>
+          </form>
+    </section>
+</div>
