@@ -1,0 +1,14 @@
+.list__header, .event{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); // Three columns
+    gap: 10px; // Adjust the gap between grid items
+}
+
+// .list__header {
+//     grid-column: span 3; // Span all three columns
+// }
+
+// .event {
+//     display: grid;
+//     grid-template-columns: repeat(3, 1fr); // Three columns
+// }

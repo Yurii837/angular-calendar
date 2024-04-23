@@ -1,22 +1,7 @@
-<div class="calendar-wraper">
-  <mat-calendar
-  #myCalendar
-  periodButtonDescription="aaa"
-  periodButtonLabel="bbb"
-  periodButtonText="ccc"
+<div class="wraper">
 
-  [dateClass]="dateClass"
-  (selectedChange)="dateClickHandler($event)"
-  (monthSelected)="handleMonthSelected($event)"
-
+  <app-calendar style="width: 50%;"></app-calendar>
 
   
-  ></mat-calendar>
-  <mat-form-field>
-    <mat-label>Choose a date</mat-label>
-    <input matInput [matDatepicker]="picker" (dateChange)="dateChange($event)">
-    <mat-hint>MM/DD/YYYY</mat-hint>
-    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+  <app-scedule-list style="width: 50%;"></app-scedule-list>
 </div>

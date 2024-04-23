@@ -2,3 +2,10 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+::ng-deep .close-btn {
+    float: right;
+    border: none;
+    padding: 5px;
+    background-color: transparent;
+}

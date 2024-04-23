@@ -1,1 +1,15 @@
-<p>scedule-list works!</p>
+<div class="list">
+    <div class="list__header">
+        <span>Name</span>
+        <span>Description</span>
+        <span>Time</span>
+
+    </div>
+    <div class="list__content">
+        <div *ngFor="let event of events" class="event">
+            <span>{{event.name}}</span>
+            <span>{{event.description}}</span>
+            <span>{{event.date.toLocaleString()}}</span>
+        </div>
+    </div>
+</div>

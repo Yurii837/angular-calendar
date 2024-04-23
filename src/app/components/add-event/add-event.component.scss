@@ -1,0 +1,12 @@
+// makes timepicker visible
+.mat-mdc-input-element::-webkit-calendar-picker-indicator {
+    display: block;
+  }
+
+.main {
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+    }
+}

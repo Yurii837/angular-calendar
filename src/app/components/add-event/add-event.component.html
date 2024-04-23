@@ -1,23 +1,40 @@
 <div>
     <section class="header">
         <span>Add event</span>
-        <span>{{data.date.toString()}}</span>
+        <span>{{data.date?.toLocaleDateString()}}</span>
+        <button
+        mat-icon-button
+            class="close-btn"
+        >
+        <mat-icon>close</mat-icon>
+        </button>
     </section>
     <section class="main">
-        <form class="example-form">
+        <form class="main__form" [formGroup]="eventForm">
             <mat-form-field class="">
               <mat-label>Event name</mat-label>
-              <input matInput placeholder="Ex. Pizza" value="Sushi">
+              <input matInput formControlName="name">
+            </mat-form-field>
+            
+            <mat-form-field class="">
+              <mat-label>Event description</mat-label>
+              <textarea matInput placeholder="Ex. It makes me feel..." formControlName="description"></textarea>
             </mat-form-field>
           
             <mat-form-field>
             <mat-label>Favorite food</mat-label>
-            <mat-select>
+            <mat-select formControlName="type">
                 @for (food of [1,2,3]; track food) {
                 <mat-option [value]="food">{{food}}</mat-option>
                 }
             </mat-select>
             </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>time</mat-label>
+                <input type="time" matInput formControlName="time"/>
+            </mat-form-field>
           </form>
+          <button mat-flat-button (click)="formSubmit()" type="submit" color="secondary">Warn</button>
     </section>
 </div>
