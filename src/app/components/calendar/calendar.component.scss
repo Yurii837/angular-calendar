@@ -1,0 +1,47 @@
+  ::ng-deep.todays_class::after {
+    counter-increment: section; 
+    content: attr(aria-label);
+    border-radius: 6px;
+    background: #1e88e5;
+    text-align: start;
+    color: white !important;
+      height: 1rem;
+      line-height:1rem;
+    white-space: pre;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0.2rem;
+    margin:0.05rem;
+    display:block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  }
+  
+  ::ng-deep.todays_class:hover::after {
+    content: attr(aria-label);
+    max-width: 300px;
+    border-radius: 8px;
+    z-index: 1;
+    height: auto;
+    max-height: 400px;
+  }
+  
+  ::ng-deep.normal>.mat-calendar-body-cell-content,
+  ::ng-deep.example-custom-date-class>.mat-calendar-body-cell-content,::ng-deep.todays_class>.mat-calendar-body-cell-content
+  {
+    border: none !important;
+  }
+
+  .follow-btn {
+    display: block;
+    margin: 0 auto;
+    width: 200px;
+    height: 24px;
+  }
+
+  
+  
+  
+  

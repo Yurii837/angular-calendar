@@ -1,0 +1,6 @@
+<mat-calendar
+    #calendar
+    [dateClass]="dateClass"
+    (selectedChange)="dateClickHandler($event)"
+></mat-calendar>
+<button class="follow-btn" type="button" (click)="followToday()">Follow Today</button>

@@ -1,0 +1,49 @@
+<div>
+    <section class="header">
+        <span class="header__title">{{(data.name? 'Edit' : 'Create')+' event'}}</span>
+        <span *ngIf="!data.name" class="header__date">{{data.date.toLocaleDateString()}}</span>
+        <button mat-dialog-close class="close-btn" (click)="dialogRef.close()">
+            <mat-icon class="close-btn__icon">close</mat-icon>
+        </button>
+    </section>
+    <section class="main">
+        <form class="form" [formGroup]="eventForm">
+            <mat-form-field *ngIf="data.name">
+                <mat-label>Choose event date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="date">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="">
+                <mat-label>Event name</mat-label>
+                <input matInput formControlName="name">
+                <mat-error>Name is <strong>{{JSON.stringify(eventForm.get('name')?.errors)}}</strong></mat-error>
+            </mat-form-field>
+            
+            <mat-form-field class="">
+                <mat-label>Event description</mat-label>
+                <textarea matInput placeholder="Ex. It makes me feel..." formControlName="description"></textarea>
+            </mat-form-field>
+          
+            <mat-form-field>
+                <mat-label>Event color type</mat-label>
+                <mat-select formControlName="type">
+                    <mat-select-trigger class="form__select-trigger" [ngStyle]="{'background': ColorType[eventForm.get('type')?.value || 'default']}">
+                        <span >{{eventForm.get('type')?.value}}</span>
+                    </mat-select-trigger>
+                    <mat-option *ngFor="let type of ColorTypes" [value]="type" [ngStyle]="{'background': ColorType[type]}">
+                        <span >{{type}}</span>
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>time</mat-label>
+                <input type="time" matInput formControlName="time"/>
+            </mat-form-field>
+
+            <button class="submit-btn" color="primary" mat-flat-button [disabled]="eventForm.invalid" (click)="formSubmit()" type="submit">{{(data.name? 'Edit' : 'Create')+' event'}}</button>
+          </form>
+    </section>
+</div>
