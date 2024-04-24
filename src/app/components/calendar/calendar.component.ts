@@ -1,69 +1,52 @@
-import { Component, Renderer2, ViewChild } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { MatCalendar, MatCalendarCellCssClasses, MatDatepickerModule } from '@angular/material/datepicker';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { MatCalendar, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
-import {MatIconModule} from '@angular/material/icon';
-import {
-  MatDialog,
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogTitle,
-  MatDialogContent,
-  MatDialogActions,
-  MatDialogClose,
-} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 
-import { first } from 'rxjs';
 import { SceduleListComponent } from '../scedule-list/scedule-list.component';
 import { AddEventComponent } from '../add-event/add-event.component';
 import { CommonModule } from '@angular/common';
 import { SceduleListService } from '../scedule-list/scedule-list.service';
 import { SceduleItem } from '../../assets/scedule.class';
-
+import { DayEvents } from '../../assets/interfase';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
     MatDatepickerModule,
-    MatNativeDateModule, SceduleListComponent],
+    MatNativeDateModule, 
+    SceduleListComponent
+  ],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss'
 })
-export class CalendarComponent {
-  @ViewChild('myCalendar') myCalendar!: MatCalendar<Date>;
+
+export class CalendarComponent implements OnDestroy {
+  @ViewChild('calendar') calendar!: MatCalendar<Date>;
+
   constructor(
     private dialog: MatDialog,
     private sceduleListService: SceduleListService
   ) {
-
-    this.sceduleListService.DaySelect$
+    this.sub1 = this.sceduleListService.DaySelect$
       .subscribe(date => {
        this.selectDay(date)
       })
 
-    this.sceduleListService.SceduleList$
+      this.sub2 =this.sceduleListService.SceduleList$
       .subscribe(SceduleList => {
         this.createDaysVithEvents(SceduleList)
       })
   }
 
-  today = new Date()
-  
-  dates: {date: Date, text: string}[] = [
-    // { date: new Date("2024-04-01"), text: ' \nToday1fgdbabe wefxEF \n aa' },
-    // { date: new Date("2024-04-20"), text: 'Today2 \n bb' }
-  ];
+  private dates: DayEvents[] = [];
+  private sub1 = new Subscription()
+  private sub2 = new Subscription()
 
-  createDaysVithEvents(SceduleList: SceduleItem[]): void {
+  private createDaysVithEvents(SceduleList: SceduleItem[]): void {
     this.dates = []
     SceduleList.forEach(item => {
       const serchingDateIndex = this.dates.findIndex(d => d.date?.toLocaleDateString() === item.date.toLocaleDateString())
@@ -79,51 +62,54 @@ export class CalendarComponent {
         })
       }
     })
-    this.myCalendar?.updateTodaysDate();
-  }
+    this.calendar?.updateTodaysDate();
+  };
 
-    dateClass = (d: Date) => {
-      if (d.getDate()==1)
-        this.displayLabel()
-        return this.dates.find(f => f.date.toLocaleDateString() === d.toLocaleDateString())
-        ? "todays_class"
-        : "";
-
-    };
-  
-  
-    displayLabel() {
-      setTimeout(()=>{
+  private displayLabel() {
+    setTimeout(()=>{
       const cells = document.querySelectorAll(".mat-calendar-body-cell");
       cells.forEach(cell => {
-        const dateSearch = 
-          // @ts-ignore
-          new Date(cell.getAttribute("aria-label"))
-        ;
+        // @ts-ignore
+        const dateSearch = new Date(cell.getAttribute("aria-label"))
         const data = this.dates.find(f => f.date.toLocaleDateString() === dateSearch.toLocaleDateString());
-      
-        if (data) cell.setAttribute("aria-label", data.text);
+        if (data) {
+          cell.setAttribute("aria-label", data.text)
+        };
       });
-  
-      })
-    }
+    })
+  };
 
-    dateClickHandler(e: Date | null) {
-      this.myCalendar.selected = null
-      this.dialog.open(AddEventComponent, {
-        data: {date: e},
-        maxWidth: '80vw',
-      });
-    }
+  private selectDay(date: Date) {
+    this.calendar.activeDate = date
+    this.calendar.selected = date
+    // without it's selectedChange do not work on selected day
+    setTimeout(() => {
+      this.calendar.selected = null
+    });
+  };
 
-    selectDay(date: Date) {
-      this.myCalendar.activeDate = date
-      this.myCalendar.selected = date
-      // without it's selectedChange do not work on selected day
-      setTimeout(() => {
-        this.myCalendar.selected = null
-      });
-    }
+  dateClass = (d: Date) => {
+    if (d.getDate()==1)
+      this.displayLabel()
+      return this.dates.find(f => f.date.toLocaleDateString() === d.toLocaleDateString())
+        ? "todays_class"
+        : "";
+  };
 
-    followToday() {}
+  dateClickHandler(e: Date | null) {
+    this.calendar.selected = null
+    this.dialog.open(AddEventComponent, {
+      data: {date: e},
+      maxWidth: '80vw',
+    });
+  };
+
+  followToday() {
+    this.selectDay(new Date)
+  };
+
+  ngOnDestroy(): void {
+    this.sub1.unsubscribe()
+    this.sub2.unsubscribe()
+  };
 }

@@ -7,7 +7,9 @@
         <span>Remain Time</span>
         <span>Actions</span>
     </div>
+
     <mat-divider></mat-divider>
+    
     <mat-list class="">
         <div 
             *ngFor="let event of events" 
@@ -19,9 +21,9 @@
             <span class="italic-font">{{event.description}}</span>
             <span>{{event.date.toLocaleString().slice(0, -3)}}</span>
             <span class="italic-font">{{differenceInDays(event.date)}}</span>
-            <span class="list__actions">
-                <mat-icon class="icon" (click)="edit(event)">edit</mat-icon>
-                <mat-icon class="icon" (click)="remove(event)">delete</mat-icon>
+            <span class="list__actions" (click)="$event.stopPropagation(); $event.preventDefault()">
+                <mat-icon class="icon" (click)="edit(event); $event.stopPropagation(); $event.preventDefault()">edit</mat-icon>
+                <mat-icon class="icon" (click)="remove(event); $event.stopPropagation(); $event.preventDefault()">delete</mat-icon>
             </span>
         </div>
     </mat-list>

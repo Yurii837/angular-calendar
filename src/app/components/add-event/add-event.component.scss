@@ -17,10 +17,6 @@
     }
 }  
 
-// .main {
-
-// }
-
 .form {
     display: flex;
     flex-direction: column;
@@ -48,4 +44,8 @@
         width: auto;
         height: auto;
     }
+}
+
+.submit-btn {
+    height: 50px;
 }

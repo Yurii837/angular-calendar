@@ -30,10 +30,17 @@
   
   ::ng-deep.normal>.mat-calendar-body-cell-content,
   ::ng-deep.example-custom-date-class>.mat-calendar-body-cell-content,::ng-deep.todays_class>.mat-calendar-body-cell-content
-  
   {
-  border: none !important;
+    border: none !important;
   }
+
+  .follow-btn {
+    display: block;
+    margin: 0 auto;
+    width: 200px;
+    height: 24px;
+  }
+
   
   
   

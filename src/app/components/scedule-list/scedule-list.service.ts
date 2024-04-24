@@ -6,11 +6,8 @@ import { SceduleItem } from '../../assets/scedule.class';
   providedIn: 'root'
 })
 export class SceduleListService {
- 
-
-  constructor() { }
   static eventId = 0;
-
+  
   private _sceduleList$ = new BehaviorSubject<SceduleItem[]>([]);
   private _daySelect$  = new Subject<any>()
 
@@ -25,9 +22,7 @@ export class SceduleListService {
   get DaySelect$(): Observable<Date> {
     return this._daySelect$.asObservable()
   }
-
  
-
   // simulate async request
   async pushEvent (eventItem: SceduleItem | any) {
     const currentList = [...this.SceduleList]

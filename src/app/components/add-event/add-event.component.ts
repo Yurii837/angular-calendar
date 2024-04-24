@@ -18,21 +18,31 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
   providers: [provideNativeDateAdapter()],
   imports: [CommonModule,
     FormsModule,
-     MatFormFieldModule,
-      MatInputModule,
-      MatSelectModule,
-      MatIconModule,
-       ReactiveFormsModule,
-       MatDatepickerModule
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatDatepickerModule
     ],
   templateUrl: './add-event.component.html',
   styleUrl: './add-event.component.scss'
 })
 export class AddEventComponent {
 
+  private formConfig = {
+    ...new SceduleItem(),
+    ...this.data,
+  }
+
   public ColorTypes = Object.keys(ColorType) as Array<keyof typeof ColorType>
   public ColorType = ColorType
-  JSON = JSON;
+  public JSON = JSON;
+
+  public eventForm = this.fb.group({
+    ...this.formConfig,
+    name: [this.formConfig.name, [Validators.required, Validators.maxLength(24)]],
+  })
 
   constructor(
     private sceduleListService: SceduleListService,
@@ -40,17 +50,6 @@ export class AddEventComponent {
     public fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: SceduleItem,
   ) {}
-
-  formConfig = {
-    ...new SceduleItem(),
-    ...this.data,
-  }
-
-  // public eventForm = this.fb.group(new SceduleItem())
-  public eventForm = this.fb.group({
-    ...this.formConfig,
-    name: [this.formConfig.name, [Validators.required, Validators.maxLength(24)]],
-  })
 
   formSubmit() {
     const actionFunction = this.data.name 
