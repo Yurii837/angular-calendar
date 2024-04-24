@@ -19,12 +19,16 @@ import {
 import { first } from 'rxjs';
 import { SceduleListComponent } from '../scedule-list/scedule-list.component';
 import { AddEventComponent } from '../add-event/add-event.component';
+import { CommonModule } from '@angular/common';
+import { SceduleListService } from '../scedule-list/scedule-list.service';
+import { SceduleItem } from '../../assets/scedule.class';
 
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [RouterOutlet,
+  imports: [
+    CommonModule,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -37,28 +41,53 @@ import { AddEventComponent } from '../add-event/add-event.component';
 export class CalendarComponent {
   @ViewChild('myCalendar') myCalendar!: MatCalendar<Date>;
   constructor(
-    private dialog: MatDialog
-  ) {}
-  Today  = [{ date: this.dateToString(new Date()), text: 'Today \n aa'}]
+    private dialog: MatDialog,
+    private sceduleListService: SceduleListService
+  ) {
 
-  dates = [
-    { date: "2020-09-01", text: "Special Day 1" },
-    { date: "2020-09-20", text: "Special Day 2" }
+    this.sceduleListService.DaySelect$
+      .subscribe(date => {
+       this.selectDay(date)
+      })
+
+    this.sceduleListService.SceduleList$
+      .subscribe(SceduleList => {
+        this.createDaysVithEvents(SceduleList)
+      })
+  }
+
+  today = new Date()
+  
+  dates: {date: Date, text: string}[] = [
+    // { date: new Date("2024-04-01"), text: ' \nToday1fgdbabe wefxEF \n aa' },
+    // { date: new Date("2024-04-20"), text: 'Today2 \n bb' }
   ];
+
+  createDaysVithEvents(SceduleList: SceduleItem[]): void {
+    this.dates = []
+    SceduleList.forEach(item => {
+      const serchingDateIndex = this.dates.findIndex(d => d.date?.toLocaleDateString() === item.date.toLocaleDateString())
+      if (serchingDateIndex > -1) {
+        // const txt = dates[serchingDateIndex].text
+        if(this.dates[serchingDateIndex]?.text) {
+          this.dates[serchingDateIndex].text += '\n'+item.name
+        }
+      } else {
+        this.dates.push({
+          date: item.date,
+          text: item.name
+        })
+      }
+    })
+    this.myCalendar?.updateTodaysDate();
+  }
 
     dateClass = (d: Date) => {
       if (d.getDate()==1)
         this.displayLabel()
-      const dateSearch = this.dateToString(d);
-      if (this.Today.find(f => f.date == dateSearch)) {
-        return this.Today.find(f => f.date == dateSearch)
+        return this.dates.find(f => f.date.toLocaleDateString() === d.toLocaleDateString())
         ? "todays_class"
-        : "normal";
-      } else {
-        return this.dates.find(f => f.date == dateSearch)
-        ? "example-custom-date-class"
-        : "normal";
-      }
+        : "";
 
     };
   
@@ -67,53 +96,34 @@ export class CalendarComponent {
       setTimeout(()=>{
       const cells = document.querySelectorAll(".mat-calendar-body-cell");
       cells.forEach(cell => {
-        const dateSearch = this.dateToString(
+        const dateSearch = 
           // @ts-ignore
           new Date(cell.getAttribute("aria-label"))
-        );
-        const data = this.dates.find(f => f.date == dateSearch);
-        const data_today = this.Today.find(f => f.date == dateSearch);
+        ;
+        const data = this.dates.find(f => f.date.toLocaleDateString() === dateSearch.toLocaleDateString());
+      
         if (data) cell.setAttribute("aria-label", data.text);
-        // @ts-ignore
-        if (data_today) cell.setAttribute("aria-label", data_today.text);
       });
   
       })
     }
-    dateToString(date: any) {
-      return (
-        date.getFullYear() +
-        "-" +
-        ("0" + (date.getMonth() + 1)).slice(-2) +
-        "-" +
-        ("0" + date.getDate()).slice(-2)
-      );
-    }
 
-    dateClickHandler(e: any) {
+    dateClickHandler(e: Date | null) {
       this.myCalendar.selected = null
-      // console.log(e.getDate())
-      const dialogRef = this.dialog.open(AddEventComponent, {
+      this.dialog.open(AddEventComponent, {
         data: {date: e},
         maxWidth: '80vw',
       });
-      dialogRef.afterClosed()
-        .pipe(first())
-        .subscribe(result => {
-          if (result === true) {
-            console.log(result)
-          }
-        });
     }
 
-    handleMonthSelected(e: any) {
-      console.log(e.getMonth())
+    selectDay(date: Date) {
+      this.myCalendar.activeDate = date
+      this.myCalendar.selected = date
+      // without it's selectedChange do not work on selected day
+      setTimeout(() => {
+        this.myCalendar.selected = null
+      });
     }
 
-    dateChange(e: any) {
-      console.log(e)
-      this.myCalendar.activeDate = new Date('2020-09-01')
-      // this.myCalendar.startAt = new Date('2020-09-13')
-      this.myCalendar.selected = new Date('2020-09-01')
-    }
+    followToday() {}
 }

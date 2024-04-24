@@ -1,15 +1,28 @@
 <div class="list">
+    <h3>Scheduler</h3>
     <div class="list__header">
         <span>Name</span>
         <span>Description</span>
         <span>Time</span>
-
+        <span>Remain Time</span>
+        <span>Actions</span>
     </div>
-    <div class="list__content">
-        <div *ngFor="let event of events" class="event">
-            <span>{{event.name}}</span>
-            <span>{{event.description}}</span>
-            <span>{{event.date.toLocaleString()}}</span>
+    <mat-divider></mat-divider>
+    <mat-list class="">
+        <div 
+            *ngFor="let event of events" 
+            class="list__event" 
+            [ngStyle]="{'background': ColorType[event.type]}"
+            (click)="followDate(event)"
+        >
+            <span class="italic-font">{{event.name}}</span>
+            <span class="italic-font">{{event.description}}</span>
+            <span>{{event.date.toLocaleString().slice(0, -3)}}</span>
+            <span class="italic-font">{{differenceInDays(event.date)}}</span>
+            <span class="list__actions">
+                <mat-icon class="icon" (click)="edit(event)">edit</mat-icon>
+                <mat-icon class="icon" (click)="remove(event)">delete</mat-icon>
+            </span>
         </div>
-    </div>
+    </mat-list>
 </div>

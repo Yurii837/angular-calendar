@@ -3,10 +3,49 @@
     display: block;
   }
 
-.main {
+.header {
+    min-width: 400px;
+    margin: 5px;
 
-    &__form {
-        display: flex;
-        flex-direction: column;
+    &__title {
+        font-size: large;
+        margin: 0 12px;
+    }
+
+    &__date{
+        font-size: larger;
+    }
+}  
+
+// .main {
+
+// }
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+
+    &__select-trigger{
+        display: block;
+    padding: 0 6px;
+    border-radius: 5px;
+    }
+}
+
+.close-btn {
+    display: block;
+    float: inline-end;
+    margin: 5px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+
+    &__icon {
+        font-size: 10px;
+        width: auto;
+        height: auto;
     }
 }
